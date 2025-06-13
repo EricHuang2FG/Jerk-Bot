@@ -1,6 +1,6 @@
 import sqlite3
 
-PATH: str = "./"
+PATH: str = "src/database/"
 
 """CREATE TABLE messages (
                    id INTEGER PRIMARY KEY AUTOINCREMENT,
