@@ -29,7 +29,7 @@ def get_response(prompt: str) -> str:
 
     request_body: dict = {
         "model": CHAT_GPT_MODEL,
-        "messages": [{"role": "user", "content": prompt}],
+        "messages": [{"role": "user", "content": f"{prompt}\nBe concise!"}],
     }
 
     headers: dict = {
