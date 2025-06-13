@@ -2,6 +2,7 @@ import os
 import discord
 import src.api.funny.funny as funny
 import src.api.weather.weather as weather
+import src.api.chat_gpt.chat_gpt as chat
 from flask import Flask
 from threading import Thread
 from src.database import database
@@ -35,8 +36,11 @@ def get_response(user_message: str) -> tuple[str, any] | None:
         city_name: str = get_user_query(user_message, default="Toronto")
         return (RESPONSE_TYPE_STRING, weather.get_current_weather(city_name))
 
-    if user_message.startswith("?gpt"):
-        return (RESPONSE_TYPE_STRING, "I dont understand that. Please be more clear.")
+    if user_message.startswith("?chat"):
+        prompt: str = get_user_query(user_message, default="")
+        if prompt:
+            return (RESPONSE_TYPE_STRING, chat.get_response(prompt))
+        return (RESPONSE_TYPE_STRING, "Please enter a non-empty prompt!")
 
     if user_message.startswith("?meme"):
         return (RESPONSE_TYPE_IMAGE_URL, funny.get_random_meme())

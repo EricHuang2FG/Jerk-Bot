@@ -10,7 +10,7 @@ from src.utils.constants import (
 )
 from src.utils.utils import format_rate_limit_exceeded_message
 
-lock: any = threading.Lock()
+lock: threading.Lock = threading.Lock()
 prev_call_time: float = time.time() - RATE_LIMIT_WEATHER_API_SECONDS
 
 
