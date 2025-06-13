@@ -1,10 +1,31 @@
 import os
+import time
 import requests
+import threading
 from urllib.parse import quote
-from src.utils.constants import WEATHER_API_BASE_URL, TIMEOUT
+from src.utils.constants import (
+    WEATHER_API_BASE_URL,
+    TIMEOUT,
+    RATE_LIMIT_WEATHER_API_SECONDS,
+)
+from src.utils.utils import format_rate_limit_exceeded_message
+
+lock: any = threading.Lock()
+prev_call_time: float = time.time() - RATE_LIMIT_WEATHER_API_SECONDS
 
 
 def get_current_weather(city_name: str):
+    global prev_call_time
+    with lock:
+        curr_time: float = time.time()
+        time_diff: float = curr_time - prev_call_time
+        if time_diff < RATE_LIMIT_WEATHER_API_SECONDS:
+            return format_rate_limit_exceeded_message(
+                RATE_LIMIT_WEATHER_API_SECONDS, time_diff
+            )
+
+        prev_call_time = curr_time
+
     try:
         url: str = (
             f"{WEATHER_API_BASE_URL}/current.json"

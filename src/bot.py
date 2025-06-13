@@ -12,6 +12,7 @@ from src.utils.constants import (
     RESPONSE_TYPE_JOKE,
     IMAGE_BASE_PATH,
 )
+from src.utils.utils import get_user_query
 
 app = Flask("")
 
@@ -22,7 +23,7 @@ def get_response(user_message: str) -> tuple[str, any] | None:
     ):  # not a command
         return
 
-    # returns response_type, response message
+    # returns (response_type, response message)
     user_message = user_message.lower()
     if user_message.startswith("#"):
         return (
@@ -31,8 +32,7 @@ def get_response(user_message: str) -> tuple[str, any] | None:
         )
 
     if user_message.startswith("?weather"):
-        parts: list[str] = user_message.split(" ", maxsplit=1)
-        city_name: str = parts[1] if len(parts) > 1 else "Toronto"
+        city_name: str = get_user_query(user_message, default="Toronto")
         return (RESPONSE_TYPE_STRING, weather.get_current_weather(city_name))
 
     if user_message.startswith("?gpt"):
