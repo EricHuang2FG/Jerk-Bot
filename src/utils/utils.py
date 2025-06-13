@@ -10,3 +10,4 @@ def format_rate_limit_exceeded_message(
 def get_user_query(user_message: str, default: str = "") -> str:
     parts: list[str] = user_message.split(" ", maxsplit=1)
     return parts[1] if len(parts) > 1 else default
+ 
