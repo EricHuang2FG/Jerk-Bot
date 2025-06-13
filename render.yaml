@@ -3,5 +3,5 @@ services:
     name: flask-app
     env: python
     buildCommand: ""
-    startCommand: gunicorn src.bot:app --bind 0.0.0.0:8080
+    startCommand: python3 -m src.bot
     plan: free
