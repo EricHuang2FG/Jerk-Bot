@@ -1,0 +1,1 @@
+All files must be run from the root folder!
