@@ -3,6 +3,7 @@ import discord
 import src.api.funny.funny as funny
 import src.api.weather.weather as weather
 import src.api.chat_gpt.chat_gpt as chat
+import src.api.space_launches.launches as launches
 from flask import Flask
 from threading import Thread
 from src.database import database
@@ -11,6 +12,7 @@ from src.utils.constants import (
     RESPONSE_TYPE_IMAGE_URL,
     RESPONSE_TYPE_STRING,
     RESPONSE_TYPE_JOKE,
+    RESPONSE_TYPE_LAUNCHES,
     IMAGE_BASE_PATH,
 )
 from src.utils.utils import get_user_query
@@ -51,6 +53,9 @@ def get_response(user_message: str) -> tuple[str, any] | None:
     if user_message.startswith("?advice"):
         return (RESPONSE_TYPE_STRING, funny.get_random_advice())
 
+    if user_message.startswith("?future_launches"):
+        return (RESPONSE_TYPE_LAUNCHES, launches.get_future_launches())
+
     return (RESPONSE_TYPE_STRING, "Failed to identify command!")
 
 
@@ -77,6 +82,17 @@ async def send_message(
             await message_obj.channel.send(
                 f"{response_message[0]}\n{response_message[1]}"
             )
+
+        elif (
+            response_type == RESPONSE_TYPE_LAUNCHES
+        ):  # list[tuple[title, description_string, image_url]]
+            for title, description_string, image_url in response_message:
+                embed: discord.embeds.Embed = discord.Embed(
+                    title=title, description=description_string
+                )
+                embed.set_image(url=image_url)
+
+                await message_obj.channel.send(embed=embed)
 
     except Exception as e:
         print(e)
