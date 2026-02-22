@@ -11,7 +11,7 @@ RATE_LIMIT_WEATHER_API_SECONDS = 3
 
 CHAT_GPT_BASE_URL = "https://api.openai.com/v1/chat/completions"
 CHAT_GPT_MODEL = "gpt-4o-mini"
-RATE_LIMIT_CHAT_GPT_SECONDS = 120
+RATE_LIMIT_CHAT_GPT_SECONDS = 10
 
 # Space Launch API: https://thespacedevs.com/llapi
 SPACE_LAUNCHES_BASE_URL = "https://ll.thespacedevs.com/2.3.0"
