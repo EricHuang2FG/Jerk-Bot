@@ -13,6 +13,7 @@ CHAT_GPT_BASE_URL = "https://api.openai.com/v1/chat/completions"
 CHAT_GPT_MODEL = "gpt-4o-mini"
 RATE_LIMIT_CHAT_GPT_SECONDS = 120
 
+# Space Launch API: https://thespacedevs.com/llapi
 SPACE_LAUNCHES_BASE_URL = "https://ll.thespacedevs.com/2.3.0"
 RATE_LIMIT_SPACE_LAUNCHES_SECONDS = 360
 NUM_FUTURE_LAUNCHES_TO_GET = 10
@@ -20,3 +21,5 @@ NUM_FUTURE_LAUNCHES_TO_GET = 10
 ERROR_IMAGE_URL = "https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-512.png"
 
 TIMEOUT = 30
+
+IMAGE_CHANNEL_ID = 1460723596971475065
