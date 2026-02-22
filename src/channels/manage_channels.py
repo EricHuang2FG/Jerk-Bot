@@ -20,8 +20,12 @@ async def update_image_count_task(client):
                 ):
                     count += 1
 
-        new_name = f"{count}-useful-images"
-        new_topic = f"This channel can only contain {count} image(s) at a time. If another one is sent, the first image sent will be deleted."
+        if count > 1:
+            new_name = f"{count}-useful-images"
+            new_topic = f"this channel can only contain {count} images at a time. if another one is sent, the first image sent will be deleted."
+        else:
+            new_name = "useful-image"
+            new_topic = "this channel can only contain 1 image at a time. if another one is sent, the first image sent will be deleted."
 
         # Only update if there is a change to save on API calls
         if channel.name != new_name or channel.topic != new_topic:
