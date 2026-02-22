@@ -1,10 +1,10 @@
 import os
 import discord
-from discord.ext import tasks
 import src.api.funny.funny as funny
 import src.api.weather.weather as weather
 import src.api.chat_gpt.chat_gpt as chat
 import src.api.space_launches.launches as launches
+import src.channels.manage_channels as manage_channels
 from flask import Flask
 from threading import Thread
 from src.database import database
@@ -19,34 +19,6 @@ from src.utils.constants import (
 from src.utils.utils import get_user_query
 
 app = Flask("")
-
-IMAGE_CHANNEL_ID = 1460723596971475065
-
-@tasks.loop(minutes=10) # Run every 10 mins to respect rate limits
-async def update_image_count_task(client):
-    try:
-        # Ensure channel exists and is a text channel/thread
-        channel = client.get_channel(IMAGE_CHANNEL_ID)
-        if not channel or not hasattr(channel, "history"):
-            return
-
-        count = 0
-        # Iterate through history
-        async for message in channel.history(limit=None):
-            for attachment in message.attachments:
-                if any(attachment.filename.lower().endswith(ext) for ext in ['png', 'jpg', 'jpeg', 'gif', 'webp', 'heic']):
-                    count += 1
-
-        new_name = f"{count}-useful-images"
-        new_topic = f"this channel can only contain {count} image at a time. if another one is sent, the first image sent will be deleted."
-
-        # Only update if there is a change to save on API calls
-        if channel.name != new_name or channel.topic != new_topic:
-            await channel.edit(name=new_name, topic=new_topic)
-            print(f"Updated {channel.name} to {count} images.")
-    except Exception as e:
-        print(f"Error in update_image_count_task: {e}")
-
 
 
 def get_response(user_message: str) -> tuple[str, any] | None:
@@ -139,8 +111,8 @@ def run_discord_bot() -> None:
     @client.event
     async def on_ready() -> None:
         print(f"Logged in as {client.user.name}")
-        if not update_image_count_task.is_running():
-            update_image_count_task.start(client)
+        if not manage_channels.update_image_count_task.is_running():
+            manage_channels.update_image_count_task.start(client)
 
     @client.event
     async def on_message(message: discord.Message) -> None:
