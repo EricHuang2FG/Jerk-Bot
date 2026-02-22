@@ -2,7 +2,7 @@ from discord.ext import tasks
 from src.utils.constants import IMAGE_CHANNEL_ID
 
 
-@tasks.loop(minutes=10)  # Run every 10 mins to respect rate limits
+@tasks.loop(minutes=2)  # Run every 2 mins to respect rate limits
 async def update_image_count_task(client):
     try:
         # Ensure channel exists and is a text channel/thread
